@@ -137,3 +137,7 @@ dist
 # Vite logs files
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
+
+firebase.js
+firebase-service-account.json
+cs465-footbal-site-firebase-adminsdk-fbsvc-0358231f40.json
