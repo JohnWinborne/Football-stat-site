@@ -1,0 +1,43 @@
+.favorites-page {
+  padding: 16px;
+}
+
+.favorites-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.favorites-icon {
+  color: gold;
+}
+
+.favorites-empty {
+  color: #666;
+  font-style: italic;
+}
+
+.favorite-item {
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.favorite-meta {
+  color: #444;
+}
+
+.favorite-remove-btn {
+  margin-left: auto;
+  padding: 4px 8px;
+  cursor: pointer;
+  border: 1px solid #cfcfcf;
+  background: white;
+  border-radius: 4px;
+}
+
+.favorite-remove-btn:hover {
+  background: #f2f2f2;
+}
