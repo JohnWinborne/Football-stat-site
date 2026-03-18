@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./players.css";
 import { addFavorite, isFavorite, removeFavorite } from "../utils/favorites";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -30,6 +31,7 @@ function pick(obj, keys, fallback = 0) {
 }
 
 export default function PlayersPage() {
+  const navigate = useNavigate();
   //array for full player objects like id, fname, lname, ...
   const [players, setPlayers] = useState([]);
   //text typed into search bar
@@ -376,7 +378,12 @@ export default function PlayersPage() {
           const xpMade = pick(row, ["ExtraPointsMade"], 0);
 
           return (
-            <div className="card" key={p.PlayerID}>
+            <div
+              className="card"
+              key={p.PlayerID}
+              onClick={() => navigate(`/player/${p.PlayerID}`)}
+              style={{ cursor: "pointer" }}
+            >
               {p.photoUrl ? (
                 <img
                   className="avatar"
@@ -386,7 +393,6 @@ export default function PlayersPage() {
               ) : (
                 <div className="avatar" />
               )}
-
               <div className="cardBody">
                 <h3 className="name">
                   {p.DisplayName || `${p.FirstName} ${p.LastName}`}
@@ -437,7 +443,13 @@ export default function PlayersPage() {
                   </p>
                 )}
 
-                <button className="pill" onClick={() => toggleFavorite(p)}>
+                <button
+                  className="pill"
+                  onClick={(e) => {
+                    e.stopPropagation(); //prevents navigating to details page
+                    toggleFavorite(p);
+                  }}
+                >
                   <FontAwesomeIcon
                     icon={saved ? solidStar : regularStar}
                     color={saved ? "gold" : "gray"}

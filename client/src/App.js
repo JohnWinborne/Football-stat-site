@@ -1,18 +1,23 @@
-import { useState } from "react";
+import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import PlayersPage from "./pages/PlayersPage";
 import Favorites from "./pages/Favorites";
+import PlayerDetailsPage from "./pages/PlayerDetailsPage";
 
 export default function App() {
-  const [page, setPage] = useState("players");
-
   return (
-    <div>
-      <nav style={{ padding: 16, display: "flex", gap: 12 }}>
-        <button onClick={() => setPage("players")}>Players</button>
-        <button onClick={() => setPage("favorites")}>Favorites</button>
-      </nav>
+    <BrowserRouter>
+      <div>
+        <nav style={{ padding: 16, display: "flex", gap: 12 }}>
+          <Link to="/">Players</Link>
+          <Link to="/favorites">Favorites</Link>
+        </nav>
 
-      {page === "players" ? <PlayersPage /> : <Favorites />}
-    </div>
+        <Routes>
+          <Route path="/" element={<PlayersPage />} />
+          <Route path="/favorites" element={<Favorites />} />
+          <Route path="/player/:id" element={<PlayerDetailsPage />} />
+        </Routes>
+      </div>
+    </BrowserRouter>
   );
 }
