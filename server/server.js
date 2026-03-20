@@ -30,7 +30,7 @@ console.log("Using SPORTSDB key=", SPORTSDB_API_KEY ? "(set)" : "(missing)");
 // cors (where I allow requests from)
 app.use(
   cors({
-    origin: ["http://localhost:3000"],
+    origin: "*",
   }),
 );
 

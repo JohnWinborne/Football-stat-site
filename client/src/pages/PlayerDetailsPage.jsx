@@ -4,7 +4,7 @@ import "./playerDetails.css";
 import defaultAvatar from "../assets/MissingPhotoAvatar.png";
 import { addFavorite, isFavorite, removeFavorite } from "../utils/favorites";
 
-const API_BASE = "http://localhost:5000";
+const API_BASE = process.env.REACT_APP_API_BASE_URL || "http://localhost:5000";
 const LATEST_SEASON = "2025 REG";
 // player colors
 const TEAM_COLORS = {
