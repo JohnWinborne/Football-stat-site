@@ -1,17 +1,25 @@
 .detailsPage {
+  min-height: 100vh;
+  background: black;
+  color: white;
+  padding: 24px;
+}
+
+.detailsInner {
   max-width: 1100px;
   margin: 0 auto;
-  padding: 24px;
 }
 
 .backLink {
   display: inline-block;
   margin-bottom: 16px;
   text-decoration: none;
+  color: white;
 }
 
 .detailsTitle {
   margin-bottom: 20px;
+  color: white;
 }
 
 .detailsLayout {
@@ -22,6 +30,7 @@
 
 .detailsLeft {
   text-align: center;
+  color: white;
 }
 
 .detailsPhoto {
@@ -29,7 +38,7 @@
   max-width: 220px;
   height: 260px;
   object-fit: contain;
-  border: 1px solid #cfcfcf;
+  border: 3px solid var(--team-color, #cfcfcf);
   border-radius: 12px;
   background: white;
 }
@@ -38,11 +47,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  color: black;
 }
 
 .detailsName {
   margin-top: 16px;
   margin-bottom: 8px;
+  color: white;
 }
 
 .detailsRight {
@@ -56,10 +67,11 @@
   justify-content: space-between;
   align-items: flex-start;
   gap: 20px;
-  border: 1px solid #cfcfcf;
+  border: 2px solid var(--team-color, #ccc);
+  background: color-mix(in srgb, var(--team-color) 15%, white);
   border-radius: 12px;
   padding: 16px;
-  background: white;
+  color: black;
 }
 
 .favoriteBtn {
@@ -71,10 +83,11 @@
 }
 
 .statsBox {
-  border: 1px solid #cfcfcf;
+  border: 2px solid var(--team-color, #ccc);
   border-radius: 12px;
   padding: 16px;
-  background: white;
+  background: color-mix(in srgb, var(--team-color) 10%, white);
+  color: black;
 }
 
 @media (max-width: 768px) {

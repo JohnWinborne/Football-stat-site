@@ -1,25 +1,49 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./players.css";
+import defaultAvatar from "../assets/MissingPhotoAvatar.png";
 import { addFavorite, isFavorite, removeFavorite } from "../utils/favorites";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar as solidStar } from "@fortawesome/free-solid-svg-icons";
 import { faStar as regularStar } from "@fortawesome/free-regular-svg-icons";
 
 const API_BASE = "http://localhost:5000";
-const LATEST_SEASON = "2025REG";
-
-function ageFromBirthDate(birthDate) {
-  if (!birthDate) return null;
-  const d = new Date(birthDate); //use date object to turn 2000-05-10 into may 10, 2000
-  if (Number.isNaN(d.getTime())) return null; //checks if date valid
-
-  const now = new Date(); //get current date
-  let age = now.getFullYear() - d.getFullYear(); //get now year - birth year
-  const m = now.getMonth() - d.getMonth(); //if negative the birthday has not happened yet this year
-  if (m < 0 || (m === 0 && now.getDate() < d.getDate())) age -= 1;
-  return age;
-}
+const LATEST_SEASON = "2025 REG";
+// players colors
+const TEAM_COLORS = {
+  ARI: "#97233F",
+  ATL: "#A71930",
+  BAL: "#241773",
+  BUF: "#00338D",
+  CAR: "#0085CA",
+  CHI: "#0B162A",
+  CIN: "#FB4F14",
+  CLE: "#311D00",
+  DAL: "#003594",
+  DEN: "#FB4F14",
+  DET: "#0076B6",
+  GB: "#203731",
+  HOU: "#03202F",
+  IND: "#002C5F",
+  JAX: "#006778",
+  KC: "#E31837",
+  LV: "#000000",
+  LAC: "#0080C6",
+  LAR: "#003594",
+  MIA: "#008E97",
+  MIN: "#4F2683",
+  NE: "#002244",
+  NO: "#D3BC8D",
+  NYG: "#0B2265",
+  NYJ: "#125740",
+  PHI: "#004C54",
+  PIT: "#FFB612",
+  SEA: "#002244",
+  SF: "#AA0000",
+  TB: "#D50A0A",
+  TEN: "#4B92DB",
+  WAS: "#5A1414",
+};
 
 function pick(obj, keys, fallback = 0) {
   if (!obj) return fallback; //check obj and uses fallback if obj is null or undefined
@@ -55,9 +79,6 @@ export default function PlayersPage() {
 
   const [posOn, setPosOn] = useState(false);
   const [pos, setPos] = useState("");
-
-  const [statusOn, setStatusOn] = useState(false);
-  const [status, setStatus] = useState("");
 
   const [ageOn, setAgeOn] = useState(false);
   const [ageMin, setAgeMin] = useState("");
@@ -150,11 +171,6 @@ export default function PlayersPage() {
     return ["", ...Array.from(set).sort()];
   }, [players]);
 
-  const statuses = useMemo(() => {
-    const set = new Set(players.map((p) => p.Status).filter(Boolean));
-    return ["", ...Array.from(set).sort()];
-  }, [players]);
-
   const filtered = useMemo(() => {
     //useMemo depends on players, query, and filter states
     const q = query.trim().toLowerCase(); //makes query have no spaces and lowercase
@@ -168,10 +184,10 @@ export default function PlayersPage() {
       const matchQuery = !q || name.includes(q); //if query is empty match everything
       const matchTeam = !teamOn || !team || p.Team === team; //if team filter is off or no team selected allow all otherwise require matching team
       const matchPos = !posOn || !pos || p.Position === pos;
-      const matchStatus = !statusOn || !status || p.Status === status;
 
-      const age = ageFromBirthDate(p.BirthDate);
-      const min = ageMin === "" ? null : Number(ageMin); //converts string inputs into numbers
+      const age = p.Age;
+
+      const min = ageMin === "" ? null : Number(ageMin);
       const max = ageMax === "" ? null : Number(ageMax);
 
       const matchAge =
@@ -181,21 +197,9 @@ export default function PlayersPage() {
           (max == null || age <= max));
 
       // a player is included only if these are true
-      return matchQuery && matchTeam && matchPos && matchStatus && matchAge;
+      return matchQuery && matchTeam && matchPos && matchAge;
     });
-  }, [
-    players,
-    query,
-    teamOn,
-    team,
-    posOn,
-    pos,
-    statusOn,
-    status,
-    ageOn,
-    ageMin,
-    ageMax,
-  ]); //dependency array
+  }, [players, query, teamOn, team, posOn, pos, ageOn, ageMin, ageMax]); //dependency array
 
   const toggleFavorite = (player) => {
     //this adds and removes players from favs
@@ -210,8 +214,6 @@ export default function PlayersPage() {
     setTeam("");
     setPosOn(false);
     setPos("");
-    setStatusOn(false);
-    setStatus("");
     setAgeOn(false);
     setAgeMin("");
     setAgeMax("");
@@ -220,14 +222,16 @@ export default function PlayersPage() {
 
   return (
     <div className="page">
-      <h1 className="title">NFL PLAYER STATS</h1>
-      <div className="searchRow">
-        <input
-          className="search"
-          placeholder="search player name"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-        />
+      <div className="pageInner">
+        <h1 className="title">NFL PLAYER STATS</h1>
+        <div className="searchRow">
+          <input
+            className="search"
+            placeholder="search player name"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+          />
+        </div>
       </div>
 
       {/* Filters bar */}
@@ -282,31 +286,6 @@ export default function PlayersPage() {
           ))}
         </select>
 
-        {/* STATUS */}
-        <label
-          className="pill"
-          style={{ display: "flex", gap: 8, alignItems: "center" }}
-        >
-          <input
-            type="checkbox"
-            checked={statusOn}
-            onChange={(e) => setStatusOn(e.target.checked)}
-          />
-          Status
-        </label>
-        <select
-          className="pill"
-          value={status}
-          onChange={(e) => setStatus(e.target.value)}
-          disabled={!statusOn}
-        >
-          {statuses.map((s) => (
-            <option key={s || "all"} value={s}>
-              {s ? s : "All Statuses"}
-            </option>
-          ))}
-        </select>
-
         {/* AGE */}
         <label className="pill pillCheck">
           <input
@@ -348,7 +327,6 @@ export default function PlayersPage() {
         {filtered.map((p) => {
           //loop through filtered players
           const saved = isFavorite(p.PlayerID);
-          const age = ageFromBirthDate(p.BirthDate);
           const row = statsByPlayerId[p.PlayerID] || null;
 
           const pos = (p.Position || "").toUpperCase();
@@ -382,17 +360,19 @@ export default function PlayersPage() {
               className="card"
               key={p.PlayerID}
               onClick={() => navigate(`/player/${p.PlayerID}`)}
-              style={{ cursor: "pointer" }}
+              style={{
+                "--team-color": TEAM_COLORS[p.Team] || "#ccc",
+              }}
             >
-              {p.photoUrl ? (
-                <img
-                  className="avatar"
-                  src={p.photoUrl}
-                  alt={`${p.FirstName} ${p.LastName}`}
-                />
-              ) : (
-                <div className="avatar" />
-              )}
+              <img
+                className="avatar"
+                src={p.photoUrl || defaultAvatar}
+                alt={`${p.FirstName} ${p.LastName}`}
+                onError={(e) => {
+                  e.currentTarget.src = defaultAvatar;
+                }}
+              />
+
               <div className="cardBody">
                 <h3 className="name">
                   {p.DisplayName || `${p.FirstName} ${p.LastName}`}
@@ -404,10 +384,7 @@ export default function PlayersPage() {
                 </p>
 
                 <p className="meta">
-                  <b>Age:</b> {age ?? "—"}
-                </p>
-                <p className="meta">
-                  <b>BirthDate:</b> {p.BirthDate || "missing"}
+                  <b>Age:</b> {p.Age ?? "—"}
                 </p>
 
                 {!row && (
@@ -446,7 +423,7 @@ export default function PlayersPage() {
                 <button
                   className="pill"
                   onClick={(e) => {
-                    e.stopPropagation(); //prevents navigating to details page
+                    e.stopPropagation();
                     toggleFavorite(p);
                   }}
                 >

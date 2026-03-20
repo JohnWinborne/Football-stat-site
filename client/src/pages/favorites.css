@@ -1,0 +1,36 @@
+.favoritesPage {
+  background: black;
+  min-height: 100vh;
+  padding: 24px;
+}
+
+.favoritesInner {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.favoritesTitle {
+  text-align: center;
+  color: white;
+}
+
+.favoritesGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+  gap: 16px;
+}
+
+/* 1024px show 2 cards per row
+   640px show 1 card per row
+   Keeps layout consistent with Players page */
+@media (max-width: 1024px) {
+  .favoritesGrid {
+    grid-template-columns: repeat(2, minmax(240px, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .favoritesGrid {
+    grid-template-columns: 1fr;
+  }
+}
