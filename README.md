@@ -1,4 +1,5 @@
 # Football Stat Site
+By: John Winborne
 
 ## Overview
 A full-stack NFL player stats website built with React and Express. Users can browse players, search and filter by team/position/age, view player details, and save favorites.
@@ -54,6 +55,7 @@ Backend: Render
 - Express documentation
 - Axios documentation https://youtu.be/ZEKBDXGnD4s?si=j3s0sHobooCBTrp4
 - Render documentation https://youtu.be/VyxA3mlvo84?si=w5-_of9YS48PU1GK
+- ChatGPT for help debugging and how to use some libraries 
 
 
 ## Future Improvements

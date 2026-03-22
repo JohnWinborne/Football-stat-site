@@ -4,7 +4,8 @@ const cors = require("cors"); //cors controls which websites I can call to the b
 require("dotenv").config(); //loads variables from my .env file into process.env
 
 const app = express();
-app.use(express.json()); //need this to parse a request that comes in with JSON into a JavaScript object
+//need this to parse a request that comes in with JSON into a JavaScript object
+app.use(express.json()); 
 
 // ---- ENV ----
 const PORT = process.env.PORT || 5000;
@@ -14,8 +15,8 @@ const LATEST_SEASON = "2025REG";
 
 const SPORTSDB_API_KEY = process.env.SPORTSDB_API_KEY || "123";
 
-// cap how many players per /api/players call
-// to protect it from being slow, breaking, or getting blocked by APIs.
+// cap how many players get extra API calls 
+// to protect it from being slow, breaking, or hitting limits from APIs.
 const ENRICH_LIMIT = 3000;
 
 // safety check to make sure I got the API key exists before server runs
@@ -60,7 +61,7 @@ function setCache(key, data, ttlMs) {
 
 // Root
 app.get("/", (req, res) => {
-  //creates root for http://local:5000/
+  //creates root for http://localhost:5000/
   res.send("Backend is running");
 });
 
